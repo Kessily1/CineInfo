@@ -33,7 +33,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/genre_list"
-        tools:listitem="@layout/genre_card"
+        tools:listitem="@layout/movie_card"
         />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
