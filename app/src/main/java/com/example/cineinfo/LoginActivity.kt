@@ -59,10 +59,10 @@ class LoginActivity : AppCompatActivity() {
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Login bem-sucedido
-                    val intent = Intent(this, MainActivity::class.java)
+                    // Login bem-sucedido: Redireciona para SplashActivity
+                    val intent = Intent(this, SplashActivity::class.java)
                     startActivity(intent)
-                    finish()
+                    finish() // Finaliza LoginActivity para evitar voltar para ela
                 } else {
                     // Falha no login
                     val errorMessage = task.exception?.message ?: "Erro desconhecido"
