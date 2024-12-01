@@ -19,6 +19,12 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 import kotlin.math.log
 import retrofit2.http.Query
+import android.view.MenuItem
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import android.content.Intent
+
 
 
 // Definição dos dados de gênero e filme
@@ -58,10 +64,11 @@ interface MovieService {
     ): Call<MovieResponse>
 }
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapterMovie: MovieAdapter // Adaptador para a lista de filmes
     private var moviesList: List<Movie> = listOf() // Armazenar a lista completa de filmes para pesquisa
+    private lateinit var drawerLayout: DrawerLayout // Adição do DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +76,14 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        drawerLayout = binding.drawerLayout
+        var navigationView = binding.navigationView
+
+        binding.imageButton3.setOnClickListener {
+            Log.d("ImageButton", "Botão clicado!")
+            drawerLayout.openDrawer(GravityCompat.START) // Abrir o menu lateral
+        }
 
         // Configurar o RecyclerView
         adapterMovie = MovieAdapter()
@@ -116,6 +131,39 @@ class MainActivity : AppCompatActivity() {
                 Log.e("MovieAPI", "Falha na requisição: ${t.message}")
             }
         })
+    }
+
+    // Lidar com seleção de itens do menu
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_logout -> {
+                // Ação para "Sair da Conta"
+                Log.d("Menu", "Sair da Conta selecionado")
+
+                // Redirecionar para a tela de login
+                try {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish() // Finaliza a MainActivity para que o usuário não volte para ela ao pressionar "Voltar"
+                    Log.d("Menu", "Navegação para LoginActivity realizada.")
+                } catch (e: Exception) {
+                    Log.e("Menu", "Erro ao navegar para LoginActivity: ${e.message}")
+                }
+
+                // Fechar o menu lateral após a seleção
+                drawerLayout.closeDrawer(GravityCompat.START)
+            }
+        }
+        return true
+    }
+
+    override fun onBackPressed() {
+        // Fecha o menu se estiver aberto
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     // Função para realizar a busca de filmes com base na pesquisa
