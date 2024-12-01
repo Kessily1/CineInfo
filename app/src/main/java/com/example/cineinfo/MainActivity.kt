@@ -78,7 +78,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(binding.root)
 
         drawerLayout = binding.drawerLayout
-        var navigationView = binding.navigationView
+        var navigationView = findViewById<NavigationView>(R.id.navigation_view)
+        navigationView.setNavigationItemSelectedListener(this) // Adicionando o listener para o NavigationView
+
 
         binding.imageButton3.setOnClickListener {
             Log.d("ImageButton", "Botão clicado!")
@@ -137,25 +139,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_logout -> {
-                // Ação para "Sair da Conta"
                 Log.d("Menu", "Sair da Conta selecionado")
 
                 // Redirecionar para a tela de login
-                try {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish() // Finaliza a MainActivity para que o usuário não volte para ela ao pressionar "Voltar"
-                    Log.d("Menu", "Navegação para LoginActivity realizada.")
-                } catch (e: Exception) {
-                    Log.e("Menu", "Erro ao navegar para LoginActivity: ${e.message}")
-                }
-
-                // Fechar o menu lateral após a seleção
-                drawerLayout.closeDrawer(GravityCompat.START)
+                val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                startActivity(intent)
+                finish() // Finaliza a MainActivity para evitar retorno ao pressionar "Voltar"
+                Log.d("Menu", "Navegação para LoginActivity realizada.")
             }
         }
+
+        // Fechar o menu lateral após a seleção
+        drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
+
 
     override fun onBackPressed() {
         // Fecha o menu se estiver aberto
