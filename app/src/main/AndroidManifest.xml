@@ -16,8 +16,6 @@
         android:theme="@style/Theme.CineInfo"
         tools:targetApi="31">
 
-
-        <!-- Declaração da LoginActivity como tela inicial -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -27,11 +25,15 @@
             </intent-filter>
         </activity>
 
+        <!-- Declaração da SplashActivity -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <!-- Declaração da MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true" />
     </application>
-
-
 </manifest>
