@@ -42,7 +42,8 @@ data class Movie(
     @SerializedName("poster_path") val posterPath: String,
     val title: String,
     val overview: String,
-    val genres: List<Genre>
+    val genres: List<Genre>,
+    var isFavorite: Boolean = false
 )
 
 interface MovieService {
@@ -78,9 +79,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(binding.root)
 
         drawerLayout = binding.drawerLayout
-        var navigationView = findViewById<NavigationView>(R.id.navigation_view)
+        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
         navigationView.setNavigationItemSelectedListener(this) // Adicionando o listener para o NavigationView
-
 
         binding.imageButton3.setOnClickListener {
             Log.d("ImageButton", "Botão clicado!")
@@ -137,9 +137,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Log.e("MovieAPI", "Falha na requisição: ${t.message}")
             }
         })
+
+        // Adicionar o listener para o botão de favoritos
+        binding.favoritesButton.setOnClickListener {
+            if (binding.favoritesButton.isSelected) {
+                adapterMovie.setMovies(moviesList)
+                binding.favoritesButton.isSelected = false
+            } else {
+                val favoriteMovies = moviesList.filter { it.isFavorite }
+                adapterMovie.setMovies(favoriteMovies)
+                binding.favoritesButton.isSelected = true
+            }
+        }
     }
 
-    // Lidar com seleção de itens do menu
+    // Lidar com a seleção de itens do menu
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_logout -> {
@@ -157,7 +169,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-
 
     override fun onBackPressed() {
         // Fecha o menu se estiver aberto
