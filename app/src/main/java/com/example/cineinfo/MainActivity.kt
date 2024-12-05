@@ -88,9 +88,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         // Configurar o RecyclerView
-        adapterMovie = MovieAdapter({
-            Toast.makeText(this,"exemplo", Toast.LENGTH_LONG).show()
-        })
+        adapterMovie = MovieAdapter { movieId ->
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("MOVIE_ID", movieId) // Passa o movieId para a DetailActivity
+            startActivity(intent)
+        }
         binding.genreList.adapter = adapterMovie
         binding.genreList.layoutManager = LinearLayoutManager(this)
 
