@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cineinfo.databinding.MovieCardBinding
 
-class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter (private val onclick: ()->Unit): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private val movies = mutableListOf<Movie>()
 
     fun setMovies(movies: List<Movie>) {
@@ -18,7 +18,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = MovieCardBinding.inflate(inflater, parent, false) // Aplique seu layout de filme aqui
-        return MovieViewHolder(binding)
+        return MovieViewHolder(binding, onclick)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -27,11 +27,17 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun getItemCount(): Int = movies.size
 
-    class MovieViewHolder(private val binding: MovieCardBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MovieViewHolder(private val binding: MovieCardBinding, private val onclick: ()->Unit) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
+            binding.root.setOnClickListener {
+                onclick()
+            }
+
             binding.title.text = movie.title
             binding.overview.text = movie.overview
+
+
             val imageUrl = "https://image.tmdb.org/t/p/w500${movie.posterPath}"
             // Use Glide ou Picasso para carregar a imagem
             Glide.with(binding.root.context).load(imageUrl).into(binding.posterImage)

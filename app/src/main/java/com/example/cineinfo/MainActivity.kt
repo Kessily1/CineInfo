@@ -24,7 +24,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import android.content.Intent
-
+import android.widget.Toast
 
 
 // Definição dos dados de gênero e filme
@@ -88,7 +88,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         // Configurar o RecyclerView
-        adapterMovie = MovieAdapter()
+        adapterMovie = MovieAdapter({
+            Toast.makeText(this,"exemplo", Toast.LENGTH_LONG).show()
+        })
         binding.genreList.adapter = adapterMovie
         binding.genreList.layoutManager = LinearLayoutManager(this)
 
